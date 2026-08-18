@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equation of State Calculator</title>
+    <meta name="description" content="Calculate and compare compressibility factor (Z) and molar volume (V) using multiple equations of state.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="container">
+            <h1>Equation of State Calculator</h1>
+            <p class="subtitle">Based on Sandler's "Chemical, Biochemical, and Engineering Thermodynamics"</p>
+        </div>
+    </header>
+
+    <main class="container main-layout">
+        <section class="panel input-panel">
+            <h2>Input Parameters</h2>
+            
+            <form id="calc-form">
+                <div class="form-group">
+                    <label for="substance">Substance</label>
+                    <select id="substance" name="substance">
+                        <option value="water">Water (H2O)</option>
+                        <option value="co2">Carbon Dioxide (CO2)</option>
+                        <option value="methane">Methane (CH4)</option>
+                        <option value="nitrogen">Nitrogen (N2)</option>
+                        <option value="ethane">Ethane (C2H6)</option>
+                        <option value="propane">Propane (C3H8)</option>
+                        <option value="ammonia">Ammonia (NH3)</option>
+                        <option value="oxygen">Oxygen (O2)</option>
+                        <option value="custom">Custom...</option>
+                    </select>
+                </div>
+
+                <div id="custom-props" class="custom-props hidden">
+                    <div class="form-group">
+                        <label for="tc">Critical Temperature ($T_c$) [K]</label>
+                        <input type="number" id="tc" name="tc" step="any" min="0" placeholder="e.g., 647.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="pc">Critical Pressure ($P_c$) [bar]</label>
+                        <input type="number" id="pc" name="pc" step="any" min="0" placeholder="e.g., 220.55">
+                    </div>
+                    <div class="form-group">
+                        <label for="omega">Acentric Factor ($\omega$)</label>
+                        <input type="number" id="omega" name="omega" step="any" placeholder="e.g., 0.344">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label for="temp">Temperature (T)</label>
+                        <input type="number" id="temp" name="temp" step="any" required min="-273.15" placeholder="e.g., 300">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="temp-unit">Unit</label>
+                        <select id="temp-unit" name="temp-unit">
+                            <option value="K">K</option>
+                            <option value="C">°C</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label for="press">Pressure (P)</label>
+                        <input type="number" id="press" name="press" step="any" required min="0" placeholder="e.g., 1">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="press-unit">Unit</label>
+                        <select id="press-unit" name="press-unit">
+                            <option value="bar">bar</option>
+                            <option value="atm">atm</option>
+                            <option value="Pa">Pa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Calculate</button>
+
+                <div id="validation-warning" class="warning-msg hidden"></div>
+            </form>
+
+            <div class="reference-info mt-4">
+                <div class="info-item">
+                    <span class="label">Reduced Temperature ($T_r$):</span>
+                    <span id="tr-display" class="value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Reduced Pressure ($P_r$):</span>
+                    <span id="pr-display" class="value">--</span>
+                </div>
+            </div>
+
+            <details class="equations-section mt-4">
+                <summary>Show Equations</summary>
+                <div class="equations-content">
+                    <p><strong>Ideal Gas:</strong><br>$Z = 1$</p>
+                    <p><strong>Van der Waals (VdW):</strong><br>$Z^3 - (1+B)Z^2 + AZ - AB = 0$<br>$A = \frac{27}{64} \frac{P_r}{T_r^2}$, $B = \frac{1}{8} \frac{P_r}{T_r}$</p>
+                    <p><strong>Redlich-Kwong (RK):</strong><br>$Z^3 - Z^2 + (A - B - B^2)Z - AB = 0$<br>$A = 0.42748 \frac{P_r}{T_r^{2.5}}$, $B = 0.08664 \frac{P_r}{T_r}$</p>
+                    <p><strong>Soave-Redlich-Kwong (SRK):</strong><br>$Z^3 - Z^2 + (A - B - B^2)Z - AB = 0$<br>$A = 0.42748 \frac{P_r}{T_r^2} \alpha$, $B = 0.08664 \frac{P_r}{T_r}$<br>$\alpha = [1 + (0.480 + 1.574\omega - 0.176\omega^2)(1 - \sqrt{T_r})]^2$</p>
+                    <p><strong>Peng-Robinson (PR):</strong><br>$Z^3 - (1-B)Z^2 + (A - 2B - 3B^2)Z - (AB - B^2 - B^3) = 0$<br>$A = 0.45724 \frac{P_r}{T_r^2} \alpha$, $B = 0.07780 \frac{P_r}{T_r}$<br>$\alpha = [1 + (0.37464 + 1.54226\omega - 0.26992\omega^2)(1 - \sqrt{T_r})]^2$</p>
+                    <small>Note: $V = \frac{ZRT}{P}$. If multiple real roots exist, the largest is the vapor root and the smallest is the liquid root.</small>
+                </div>
+            </details>
+        </section>
+
+        <section class="panel results-panel">
+            <h2>Results Comparison</h2>
+            
+            <div class="table-container">
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Equation of State</th>
+                            <th>Z (Compressibility)</th>
+                            <th>V (L/mol)</th>
+                            <th>% Dev. from Ideal Z</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JS -->
+                        <tr class="empty-state"><td colspan="4">Enter parameters and calculate to see results.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="zChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <p>Equations based on Sandler, Chemical, Biochemical, and Engineering Thermodynamics.</p>
+        </div>
+    </footer>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- MathJax for rendering math equations -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          }
+        };
+    </script>
+    <!-- Main JS -->
+    <script src="app.js"></script>
+</body>
+</html>
