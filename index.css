@@ -105,6 +105,7 @@ body {
     padding: 1.25rem;
     width: 100%;
     max-width: 100%;
+    min-width: 0; /* CRITICAL: Prevents CSS Grid from expanding past viewport due to content */
     border: 1px solid var(--border-color);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
@@ -126,14 +127,13 @@ body {
 }
 
 .input-with-unit input {
-    flex: 1 1 auto;
+    flex: 1;
     min-width: 0;
 }
 
 .input-with-unit select {
-    flex: 0 0 auto;
+    flex: 0 0 90px;
     min-width: 0;
-    max-width: 90px;
 }
 
 .form-group {
