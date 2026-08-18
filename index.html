@@ -55,28 +55,22 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group flex-2">
-                        <label for="temp">Temperature (T)</label>
+                <div class="form-group">
+                    <label for="temp">Temperature (T)</label>
+                    <div class="input-with-unit">
                         <input type="number" id="temp" name="temp" step="any" required min="-273.15" placeholder="e.g., 300">
-                    </div>
-                    <div class="form-group flex-1">
-                        <label for="temp-unit">Unit</label>
-                        <select id="temp-unit" name="temp-unit">
+                        <select id="temp-unit" name="temp-unit" aria-label="Temperature unit">
                             <option value="K">K</option>
                             <option value="C">°C</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group flex-2">
-                        <label for="press">Pressure (P)</label>
+                <div class="form-group">
+                    <label for="press">Pressure (P)</label>
+                    <div class="input-with-unit">
                         <input type="number" id="press" name="press" step="any" required min="0" placeholder="e.g., 1">
-                    </div>
-                    <div class="form-group flex-1">
-                        <label for="press-unit">Unit</label>
-                        <select id="press-unit" name="press-unit">
+                        <select id="press-unit" name="press-unit" aria-label="Pressure unit">
                             <option value="bar">bar</option>
                             <option value="atm">atm</option>
                             <option value="Pa">Pa</option>

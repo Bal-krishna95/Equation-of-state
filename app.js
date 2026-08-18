@@ -234,7 +234,10 @@ function renderChart(data) {
                 legend: {
                     position: 'top',
                     labels: {
-                        color: '#f8fafc'
+                        color: '#f8fafc',
+                        font: {
+                            size: window.innerWidth < 480 ? 10 : 12
+                        }
                     }
                 },
                 tooltip: {
@@ -251,7 +254,22 @@ function renderChart(data) {
                     title: {
                         display: true,
                         text: 'Compressibility Factor (Z)',
-                        color: '#f8fafc'
+                        color: '#f8fafc',
+                        font: {
+                            size: window.innerWidth < 480 ? 10 : 12
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: window.innerWidth < 480 ? 10 : 12
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: window.innerWidth < 480 ? 9 : 12
+                        }
                     }
                 }
             }
@@ -348,10 +366,10 @@ form.addEventListener('submit', (e) => {
         }
         
         tr.innerHTML = `
-            <td>${name}</td>
-            <td>${zHtml}</td>
-            <td>${vHtml}</td>
-            <td>${devHtml}</td>
+            <td data-label="Equation">${name}</td>
+            <td data-label="Z (Compressibility)">${zHtml}</td>
+            <td data-label="V (L/mol)">${vHtml}</td>
+            <td data-label="% Dev Ideal">${devHtml}</td>
         `;
         tableBody.appendChild(tr);
     }

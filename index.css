@@ -60,7 +60,7 @@ body {
 .app-header {
     background-color: var(--bg-panel);
     border-bottom: 1px solid var(--border-color);
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-xl) 0 var(--spacing-lg);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
@@ -81,7 +81,7 @@ body {
 .main-layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
+    gap: 2rem;
     padding-top: var(--spacing-xl);
     padding-bottom: var(--spacing-xl);
     flex: 1;
@@ -90,6 +90,7 @@ body {
 @media (min-width: 768px) {
     .main-layout {
         grid-template-columns: 350px 1fr;
+        gap: var(--spacing-lg);
     }
 }
 
@@ -97,7 +98,8 @@ body {
 .panel {
     background-color: var(--bg-panel);
     border-radius: var(--radius);
-    padding: var(--spacing-lg);
+    padding: 1.25rem;
+
     border: 1px solid var(--border-color);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
@@ -111,7 +113,20 @@ body {
     padding-bottom: var(--spacing-sm);
 }
 
-/* Forms */
+/* Input with Unit Layout */
+.input-with-unit {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.input-with-unit input {
+    flex: 65%;
+}
+
+.input-with-unit select {
+    flex: 35%;
+}
+
 .form-group {
     margin-bottom: var(--spacing-md);
 }
@@ -342,4 +357,95 @@ tbody tr:hover {
 .app-footer p {
     font-size: 0.75rem;
     color: var(--text-secondary);
+}
+
+/* Table Responsive Card Layout */
+@media (max-width: 480px) {
+    #results-table thead {
+        display: none;
+    }
+    
+    #results-table, #results-table tbody, #results-table tr, #results-table td {
+        display: block;
+        width: 100%;
+        white-space: normal;
+    }
+    
+    #results-table tr {
+        margin-bottom: var(--spacing-md);
+        background-color: var(--bg-main);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 0;
+        overflow: hidden;
+    }
+    
+    #results-table tr.empty-state {
+        background-color: transparent;
+        border: none;
+    }
+    
+    #results-table tr.empty-state td {
+        border-bottom: none;
+        padding: 2rem;
+        text-align: center;
+    }
+    
+    #results-table td {
+        text-align: right;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+    }
+    
+    #results-table td::before {
+        content: attr(data-label);
+        font-family: var(--font-sans);
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        text-align: left;
+        margin-right: 1rem;
+    }
+    
+    #results-table td:first-child {
+        font-size: 1rem;
+        color: var(--accent-teal);
+        justify-content: center;
+        background-color: var(--bg-panel-hover);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    #results-table td:first-child::before {
+        display: none;
+    }
+    
+    #results-table td:last-child {
+        border-bottom: none;
+    }
+    
+    .empty-state td::before {
+        display: none;
+    }
+    
+    .multi-root {
+        align-items: flex-end;
+    }
+}
+
+/* Responsive Header */
+@media (max-width: 480px) {
+    .app-header {
+        padding: 1.5rem 0 1rem;
+    }
+    .app-header h1 {
+        font-size: 1.25rem;
+    }
+    .app-header .subtitle {
+        font-size: 0.8rem;
+    }
 }
